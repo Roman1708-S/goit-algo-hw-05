@@ -1,0 +1,34 @@
+import re
+from typing import Callable, Generator
+
+
+def generator_numbers(text: str) -> Generator[float, None, None]:
+    """
+    Аналізує текст і повертає генератор, що ітерує по всіх дійсних
+    числах, знайдених у тексті. Числа мають бути чітко відокремлені
+    пробілами з обох боків.
+    """
+    # Регулярний вираз шукає послідовності виду "цифри.цифри",
+    # відокремлені пробілами з обох боків
+    pattern = r"\d+\.\d+"
+
+    for match in re.findall(pattern, text):
+        yield float(match)
+
+
+def sum_profit(text: str, func: Callable) -> float:
+    """
+    Обчислює загальну суму дійсних чисел у тексті,
+    використовуючи генератор func (generator_numbers).
+    """
+    return sum(func(text))
+
+
+if __name__ == "__main__":
+    text = (
+        "Загальний дохід працівника складається з декількох частин: "
+        "1000.01 як основний дохід, доповнений додатковими "
+        "надходженнями 27.45 і 324.00 доларів."
+    )
+    total_income = sum_profit(text, generator_numbers)
+    print(f"Загальний дохід: {total_income}")
